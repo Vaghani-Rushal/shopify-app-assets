@@ -292,6 +292,13 @@
     return element;
   }
 
+  async function insertStryleTag(cssUrl) {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = cssUrl;
+    document.head.appendChild(link);
+  }
+
   // ------------------------------ DATE AND TIME HELPER FUNCTIONS ------------------------------
   function formatDateInISO(givenDate) {
     const inputDate = new Date(givenDate);
@@ -1743,6 +1750,20 @@
   }
 
   // ------------------------------ SHOPIFY DATA GETERS FUNCTIONS ------------------------------
+  // Get Shop from various sources
+  async function getShop() {
+    try {
+      if (window.Shopify && Shopify.shop) {
+        return Shopify.shop;
+      }
+
+      return null;
+    } catch (error) {
+      console.error("Error getting shop:", error);
+      return null;
+    }
+  }
+
   // Get product ID from various sources
   async function getProductId() {
     try {
@@ -1881,8 +1902,12 @@
   async function initWidget(container) {
     try {
       // Get product ID from Liquid (if available)
-      let productId = window.shopifyProductId || null;
-      const shop = window.shopifyShop || null;
+      let productId = window?.shopifyProductId || null;
+      let shop = window?.shopifyShop || null;
+
+      if (!shop) {
+        shop = await getShop();
+      }
 
       // If product ID is not passed via Liquid, try dynamic detection
       if (!productId) {
@@ -1918,7 +1943,25 @@
     }
   }
 
+  (function () {
+    const cssUrls = [
+      "https://cdn.jsdelivr.net/gh/Vaghani-Rushal/shopify-app-assets@latest/code-flags.css",
+      "https://cdn.jsdelivr.net/gh/Vaghani-Rushal/shopify-app-assets@latest/country-modal.css",
+      "https://cdn.jsdelivr.net/gh/Vaghani-Rushal/shopify-app-assets@latest/my-app-block.css",
+    ];
+
+    cssUrls.forEach((url) => {
+      insertStryleTag(url);
+    });
+  })();
+
   document
     .querySelectorAll(".shop-cms-widget")
     .forEach((container) => initWidget(container));
 })();
+
+// https://cdn.jsdelivr.net/gh/Vaghani-Rushal/shopify-app-assets@latest/code_flags.png
+// https://cdn.jsdelivr.net/gh/Vaghani-Rushal/shopify-app-assets@latest/code-flags.css
+// https://cdn.jsdelivr.net/gh/Vaghani-Rushal/shopify-app-assets@latest/country-modal.css
+// https://cdn.jsdelivr.net/gh/Vaghani-Rushal/shopify-app-assets@latest/my-app-block.css
+// https://cdn.jsdelivr.net/gh/Vaghani-Rushal/shopify-app-assets@latest/my-app-block.js
