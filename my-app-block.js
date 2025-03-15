@@ -1721,18 +1721,18 @@
         );
       }
 
-      if (config.widget_layout_setting.mode === "messageAndProgress") {
-        if (config.widget_layout_setting.mode !== "progressOnly") {
+      if (config.widget_layout_mode === "messageAndProgress") {
+        if (config.widget_layout_mode !== "progressOnly") {
           widgetBox.appendChild(textMessageWidget);
         }
-        if (config.widget_layout_setting.mode !== "messageOnly") {
+        if (config.widget_layout_mode !== "messageOnly") {
           widgetBox.appendChild(progressBarWidget);
         }
       } else {
-        if (config.widget_layout_setting.mode !== "messageOnly") {
+        if (config.widget_layout_mode !== "messageOnly") {
           widgetBox.appendChild(progressBarWidget);
         }
-        if (config.widget_layout_setting.mode !== "progressOnly") {
+        if (config.widget_layout_mode !== "progressOnly") {
           widgetBox.appendChild(textMessageWidget);
         }
       }
