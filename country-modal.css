@@ -1,0 +1,217 @@
+.advanced-country-modal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(1.1);
+  transition:
+    visibility 0s linear 0.25s,
+    opacity 0.25s 0s,
+    transform 0.25s;
+  z-index: 1000000001;
+}
+
+.advanced-country-modal .country-modal-body {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1rem 1.5rem;
+  width: 36rem;
+  border-radius: 0.5rem;
+}
+
+@media screen and (max-width: 768px) {
+  .advanced-country-modal .country-modal-body {
+    padding: 1% 3%;
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .advanced-country-modal .country-modal-body {
+    padding: 1rem 1.5rem;
+    width: 56rem;
+  }
+}
+
+.advanced-country-modal .country-modal-body .country-modal-content {
+  margin: auto;
+}
+
+.advanced-country-modal
+  .country-modal-body
+  .country-modal-content
+  .selected-country {
+  height: 65px;
+  font-size: 16px;
+  padding: 0 20px;
+  border-radius: 7px;
+  background: #fff;
+  justify-content: space-between;
+}
+
+.advanced-country-modal
+  .country-modal-body
+  .country-modal-content
+  .selected-country,
+.advanced-country-modal
+  .country-modal-body
+  .country-modal-content
+  .select-country-options
+  .country-option-list
+  li {
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+}
+
+.advanced-country-modal
+  .country-modal-body
+  .country-modal-content
+  .selected-country
+  .select-country-dropdown {
+  font-size: 16px;
+  transition: transform 0.3s linear;
+}
+
+.advanced-country-modal
+  .country-modal-body
+  .country-modal-content.active
+  .selected-country
+  .select-country-dropdown {
+  transform: rotate(-180deg);
+}
+
+.advanced-country-modal
+  .country-modal-body
+  .country-modal-content
+  .select-country-options {
+  display: none;
+  padding: 20px;
+  margin-top: 15px;
+  border-radius: 7px;
+  background: #fff;
+}
+
+.advanced-country-modal
+  .country-modal-body
+  .country-modal-content.active
+  .select-country-options {
+  display: block;
+}
+
+.advanced-country-modal
+  .country-modal-body
+  .country-modal-content
+  .select-country-options
+  .country-search-box {
+  position: relative;
+}
+
+.advanced-country-modal
+  .country-modal-body
+  .country-modal-content
+  .select-country-options
+  .country-search-box
+  .country-search-icon {
+  left: 15px;
+  color: #999;
+  font-size: 20px;
+  line-height: 53px;
+  position: absolute;
+}
+
+.advanced-country-modal
+  .country-modal-body
+  .country-modal-content
+  .select-country-options
+  .country-search-box
+  input {
+  height: 53px;
+  width: 100%;
+  outline: 0;
+  font-size: 16px;
+  border-radius: 5px;
+  padding: 0 15px 0 43px;
+  border: 1px solid #b3b3b3;
+}
+
+.advanced-country-modal
+  .country-modal-body
+  .country-modal-content
+  .select-country-options
+  .country-option-list {
+  margin-top: 10px;
+  max-height: 250px;
+  overflow-y: auto;
+  padding: 0 7px 0 0;
+  overflow-x: hidden;
+}
+
+.advanced-country-modal
+  .country-modal-body
+  .country-modal-content
+  .select-country-options
+  .country-option-list::-webkit-scrollbar {
+  width: 7px;
+}
+
+.advanced-country-modal
+  .country-modal-body
+  .country-modal-content
+  .select-country-options
+  .country-option-list::-webkit-scrollbar-track {
+  background: #ffffff;
+  border-radius: 25px;
+}
+
+.advanced-country-modal
+  .country-modal-body
+  .country-modal-content
+  .select-country-options
+  .country-option-list::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 25px;
+}
+
+.advanced-country-modal
+  .country-modal-body
+  .country-modal-content
+  .select-country-options
+  .country-option-list
+  li {
+  height: 50px;
+  padding: 0 13px;
+  font-size: 16px;
+  border-radius: 5px;
+}
+
+.advanced-country-modal
+  .country-modal-body
+  .country-modal-content
+  .select-country-options
+  .country-option-list
+  li:hover,
+.advanced-country-modal
+  .country-modal-body
+  .country-modal-content
+  .select-country-options
+  .country-option-list
+  li.selected {
+  background: #f2f2f2;
+}
+
+.show-modal__country-modal {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+  transition:
+    visibility 0s linear 0s,
+    opacity 0.25s 0s,
+    transform 0.25s;
+}

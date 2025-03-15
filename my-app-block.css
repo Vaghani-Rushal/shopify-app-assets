@@ -1,0 +1,93 @@
+/* ----- Text Message Widget Css ----- */
+.text-message-widget p {
+  all: unset !important;
+}
+
+/* ----- Basic Progress Bar Widget Css ----- */
+.progress-bar-container {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: stretch;
+  box-shadow: none;
+  line-height: 1.15em;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.progress-bar-step-box {
+  display: flex;
+  position: relative;
+  flex: 1 0 auto;
+  flex-direction: column;
+  vertical-align: middle;
+  align-items: center;
+  margin: 0;
+  padding: 10px 6px;
+  color: #000000;
+  box-shadow: none;
+  border: none;
+  border-radius: 0;
+  box-sizing: inherit;
+}
+
+.progress-bar-container .progress-bar-step-box,
+.progress-bar-container .progress-bar-step-box::after {
+  transition:
+    background-color 0.1s ease,
+    opacity 0.1s ease,
+    color 0.1s ease,
+    box-shadow 0.1s ease;
+}
+
+.progress-bar-step-box-after {
+  display: block;
+  position: absolute;
+  z-index: 2;
+  content: "";
+  top: 50%;
+  right: 0;
+  width: 0.8em;
+  height: 0.8em;
+  transform: translateY(-50%) translateX(50%) rotate(-45deg);
+  transition:
+    background-color 0.1s ease,
+    opacity 0.1s ease,
+    color 0.1s ease,
+    box-shadow 0.1s ease;
+}
+
+/* ----- Advanced Progress Bar Styles ----- */
+.advanced-progress-bar .tooltip-container .tooltip-description {
+  display: none;
+  text-align: left;
+  background-color: #1e2021;
+  padding: 8px 2px 8px 10px;
+  margin: 8px 0 0;
+  width: 200px;
+  position: absolute;
+  border-radius: 8px;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+  left: 0;
+  color: #fff;
+  font-size: 13px;
+  line-height: 1.4;
+  word-break: break-word;
+  z-index: 10000000;
+}
+.advanced-progress-bar .tooltip-container .tooltip-description span {
+  position: absolute;
+  content: "";
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-bottom-color: #1e2021;
+  left: calc(50% - 28px);
+  top: -11px;
+}
+
+.advanced-progress-bar .tooltip-container:hover .tooltip-description {
+  display: block;
+  transform-origin: 100% 0;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
