@@ -1943,8 +1943,11 @@
   (async function () {
     try {
       // Get product ID from Liquid (if available)
+      console.log("function calling");
       let productId = window?.shopifyProductId || null;
       let shop = window?.shopifyShop || null;
+
+      console.log("get the shops and productId");
 
       if (!shop) {
         shop = await getShop();
@@ -1970,6 +1973,10 @@
         console.error("Failed to fetch config or settings.");
         return;
       }
+
+      console.log("get the config and setting");
+      console.log("config: ", config);
+      console.log("settings: ", settings);
 
       let container;
       if (settings?.widget_layout?.placement_method === "theme2") {
@@ -2039,6 +2046,8 @@
       }
 
       if (!container) return;
+
+      console.log("got the container", container);
 
       const countryList = getCountryList();
       let userLocationData = {
