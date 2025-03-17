@@ -1928,7 +1928,7 @@
     }
   }
 
-  (function () {
+  async function initStyles() {
     const cssUrls = [
       "https://cdn.jsdelivr.net/gh/Vaghani-Rushal/shopify-app-assets@main/code-flags.css",
       "https://cdn.jsdelivr.net/gh/Vaghani-Rushal/shopify-app-assets@main/country-modal.css",
@@ -1938,9 +1938,9 @@
     cssUrls.forEach((url) => {
       insertStryleTag(url);
     });
-  })();
+  };
 
-  (async function () {
+  async function initScript() {
     try {
       // Get product ID from Liquid (if available)
       console.log("function calling");
@@ -2063,7 +2063,15 @@
     } catch (error) {
       console.error("Error initializing widget:", error);
     }
-  })();
+  };
+
+  async function initAll() {
+    await initStyles();
+    await initScript();
+  }
+
+  initAll();
+  
 })();
 
 // https://cdn.jsdelivr.net/gh/Vaghani-Rushal/shopify-app-assets@main/code_flags.png
