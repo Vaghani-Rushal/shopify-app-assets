@@ -1903,13 +1903,14 @@
   async function addContainer(container, selectors, position, atEnd = true) {
     // Find the Add-to-Cart element
     const queryElement = document.querySelector(selectors.join(", "));
+    console.log("🚀 ~ addContainer ~ queryElement:", queryElement)
 
     // Ensure we're on a product page before proceeding
     if (window.location.pathname.includes("/products") && queryElement) {
       // Insert the custom container BEFORE or AFTER the Add-to-Cart form/button
-      if (position === "before") {
+      if (position === "above") {
         queryElement.parentNode.insertBefore(container, queryElement);
-      } else if (position === "after") {
+      } else if (position === "below") {
         queryElement.parentNode.insertBefore(
           container,
           queryElement.nextSibling
@@ -1938,7 +1939,7 @@
     cssUrls.forEach((url) => {
       insertStryleTag(url);
     });
-  };
+  }
 
   async function initScript() {
     try {
@@ -2063,7 +2064,7 @@
     } catch (error) {
       console.error("Error initializing widget:", error);
     }
-  };
+  }
 
   async function initAll() {
     await initStyles();
@@ -2071,7 +2072,6 @@
   }
 
   initAll();
-  
 })();
 
 // https://cdn.jsdelivr.net/gh/Vaghani-Rushal/shopify-app-assets@main/code_flags.png
