@@ -1879,27 +1879,68 @@
 
       if (!response.ok) {
         console.error("Failed to fetch config:", response.status);
-        return { config: null, locationData: null };
+        return { config: null, settings: null, locationData: null };
       }
 
       const responseData = await response.json();
 
       if (!responseData || !responseData.success || !responseData.data) {
         console.error("Invalid response format:", responseData);
-        return { config: null, locationData: null };
+        return { config: null, settings: null, locationData: null };
       }
 
       return {
         config: responseData.data,
+        settings: responseData.settings,
         locationData: responseData.locationData,
       };
     } catch (error) {
       console.error("Error fetching config:", error);
-      return { config: null, locationData: null };
+      return { config: null, settings: null, locationData: null };
     }
   }
 
-  async function initWidget(container) {
+  async function addContainer(container, selectors, position, atEnd = true) {
+    // Find the Add-to-Cart element
+    const queryElement = document.querySelector(selectors.join(", "));
+
+    // Ensure we're on a product page before proceeding
+    if (window.location.pathname.includes("/products") && queryElement) {
+      // Insert the custom container BEFORE or AFTER the Add-to-Cart form/button
+      if (position === "before") {
+        queryElement.parentNode.insertBefore(container, queryElement);
+      } else if (position === "after") {
+        queryElement.parentNode.insertBefore(
+          container,
+          queryElement.nextSibling
+        );
+      } else {
+        if (atEnd) {
+          queryElement.appendChild(container);
+        } else {
+          queryElement.insertBefore(container, queryElement.firstChild);
+        }
+      }
+    } else {
+      console.warn(
+        "Add-to-Cart form/button not found. The script did not run."
+      );
+    }
+  }
+
+  (function () {
+    const cssUrls = [
+      "https://cdn.jsdelivr.net/gh/Vaghani-Rushal/shopify-app-assets@main/code-flags.css",
+      "https://cdn.jsdelivr.net/gh/Vaghani-Rushal/shopify-app-assets@main/country-modal.css",
+      "https://cdn.jsdelivr.net/gh/Vaghani-Rushal/shopify-app-assets@main/my-app-block.css",
+    ];
+
+    cssUrls.forEach((url) => {
+      insertStryleTag(url);
+    });
+  })();
+
+  (async function () {
     try {
       // Get product ID from Liquid (if available)
       let productId = window?.shopifyProductId || null;
@@ -1920,12 +1961,84 @@
         return;
       }
 
-      const { config, locationData } = await fetchConfig(productId, shop);
+      const { config, settings, locationData } = await fetchConfig(
+        productId,
+        shop
+      );
 
-      if (!config) {
-        container.innerHTML = "";
+      if (!config || !settings) {
+        console.error("Failed to fetch config or settings.");
         return;
       }
+
+      let container;
+      if (settings?.widget_layout?.placement_method === "theme2") {
+        container = document.querySelector(".shop-cms-widget_app_block");
+      } else if (settings?.widget_layout?.placement_method === "manual") {
+        container = document.querySelector(".shop-cms-widget_manual");
+      } else if (settings?.widget_layout?.placement_method === "automatic") {
+        // List of all possible selectors for Add-to-Cart forms and buttons
+        const addToCartSelectors = [
+          'form[action*="/cart/add"]',
+          'button[name="add"]',
+          'input[name="add"]',
+          'button[name="addToCart"]',
+          'input[name="addToCart"]',
+          'button[data-action="add-to-cart"]',
+          'button[data-action="AddToCart"]',
+          "[data-product-add]",
+          '[data-action="purchase"]',
+          '[data-action="BuyNow"]',
+          ".add-to-cart",
+          ".add_to_cart",
+          ".product-form--atc-button",
+          ".add-to-cart-button",
+          ".add_to_cart_button",
+          ".btn-add-to-cart",
+          ".btn_add_to_cart",
+          ".button-add-to-cart",
+          ".button_add_to_cart",
+          ".product-atc-btn",
+          ".cart__checkout-btn",
+          ".product-atc__button",
+          ".complete-design-a",
+          ".product_buttonContainer-addToCart a",
+          ".btn--add-to-cart",
+          ".qsc-btn--add-to-cart",
+          "#add-to-cart",
+          "#addToCart",
+          "#addToCartButton",
+          "#addToCartBtn",
+          "#shopify_add_to_cart",
+          "[name=add]",
+          "[name=addToCart]",
+          "[name=AddToCart]",
+          ".g-stickybar-buynow",
+        ];
+        container = await createElem({
+          tag: "div",
+          attributes: { class: "shop-cms-widget_auto" },
+        });
+        await addContainer(
+          container,
+          addToCartSelectors,
+          settings?.widget_layout?.placement_position,
+          false
+        );
+      } else if (settings?.widget_layout?.placement_method === "query") {
+        container = await createElem({
+          tag: "div",
+          attributes: { class: "shop-cms-widget_query" },
+        });
+        await addContainer(
+          container,
+          [settings?.widget_layout?.query],
+          settings?.widget_layout?.placement_position,
+          false
+        );
+      }
+
+      if (!container) return;
 
       const countryList = getCountryList();
       let userLocationData = {
@@ -1941,27 +2054,11 @@
     } catch (error) {
       console.error("Error initializing widget:", error);
     }
-  }
-
-  (function () {
-    const cssUrls = [
-      "https://cdn.jsdelivr.net/gh/Vaghani-Rushal/shopify-app-assets@latest/code-flags.css",
-      "https://cdn.jsdelivr.net/gh/Vaghani-Rushal/shopify-app-assets@latest/country-modal.css",
-      "https://cdn.jsdelivr.net/gh/Vaghani-Rushal/shopify-app-assets@latest/my-app-block.css",
-    ];
-
-    cssUrls.forEach((url) => {
-      insertStryleTag(url);
-    });
   })();
-
-  document
-    .querySelectorAll(".shop-cms-widget")
-    .forEach((container) => initWidget(container));
 })();
 
-// https://cdn.jsdelivr.net/gh/Vaghani-Rushal/shopify-app-assets@latest/code_flags.png
-// https://cdn.jsdelivr.net/gh/Vaghani-Rushal/shopify-app-assets@latest/code-flags.css
-// https://cdn.jsdelivr.net/gh/Vaghani-Rushal/shopify-app-assets@latest/country-modal.css
-// https://cdn.jsdelivr.net/gh/Vaghani-Rushal/shopify-app-assets@latest/my-app-block.css
-// https://cdn.jsdelivr.net/gh/Vaghani-Rushal/shopify-app-assets@latest/my-app-block.js
+// https://cdn.jsdelivr.net/gh/Vaghani-Rushal/shopify-app-assets@main/code_flags.png
+// https://cdn.jsdelivr.net/gh/Vaghani-Rushal/shopify-app-assets@main/code-flags.css
+// https://cdn.jsdelivr.net/gh/Vaghani-Rushal/shopify-app-assets@main/country-modal.css
+// https://cdn.jsdelivr.net/gh/Vaghani-Rushal/shopify-app-assets@main/my-app-block.css
+// https://cdn.jsdelivr.net/gh/Vaghani-Rushal/shopify-app-assets@main/my-app-block.js
