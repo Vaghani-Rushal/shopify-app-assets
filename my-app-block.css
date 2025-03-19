@@ -3,6 +3,15 @@
   all: unset !important;
 }
 
+#text-message-widget,
+#out-of-stock-message-widget,
+#progress-bar-widget {
+  transition:
+    visibility 0s linear 0.25s,
+    opacity 0.25s 0s,
+    transform 0.25s;
+}
+
 /* ----- Basic Progress Bar Widget Css ----- */
 .progress-bar-container {
   display: inline-flex;
@@ -90,4 +99,3 @@
   transform-origin: 100% 0;
   animation: fadeIn 0.3s ease-in-out;
 }
-
